@@ -1,6 +1,7 @@
 package com.sistemadecadastro.cadastrodeguias.model;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 

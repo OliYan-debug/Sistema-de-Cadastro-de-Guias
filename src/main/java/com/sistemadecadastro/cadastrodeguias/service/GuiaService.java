@@ -23,6 +23,18 @@ public class GuiaService {
         return guiaRespository.saveAndFlush(guia);
     }
 
+    public Guia deleteGuia(int id){
+        var guia = guiaRespository.findById(id);
+        if(guia.isEmpty()) return null;
+        guiaRespository.deleteGuiaById(id);
+        return guia.get();
+    }
+    public Guia updateGuia(Integer id, Guia guia){
+        var guiaDB = guiaRespository.findById(id);
+        if(guiaDB.isEmpty()) return null;
+        guia.setId(guiaDB.get().getId());
+        return guiaRespository.save(guia);
+    }
     public List<Guia> listGuias(){
         return guiaRespository.findAll();
     }
