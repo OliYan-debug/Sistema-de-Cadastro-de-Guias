@@ -2,10 +2,13 @@ package com.sistemadecadastro.cadastrodeguias.service;
 
 import com.sistemadecadastro.cadastrodeguias.model.Guia;
 import com.sistemadecadastro.cadastrodeguias.repository.GuiaRespository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class GuiaService {
@@ -29,11 +32,28 @@ public class GuiaService {
         guiaRespository.deleteGuiaById(id);
         return guia.get();
     }
-    public Guia updateGuia(Integer id, Guia guia){
-        var guiaDB = guiaRespository.findById(id);
-        if(guiaDB.isEmpty()) return null;
-        guia.setId(guiaDB.get().getId());
-        return guiaRespository.save(guia);
+    @Transactional
+    public void updateGuia(Integer id, String nome, String sus, String procedimento, LocalDate dataNascimento, LocalDate dataRecebimento) {
+        var guia = guiaRespository.findById(id).orElseThrow(() -> {
+            return new IllegalStateException("Guia com o id: " + id +  " não encontrada");
+        });
+        if(nome != null && nome.length() > 3 && !Objects.equals(guia.getNome(), nome)){
+            guia.setNome(nome);
+        }
+        if(sus != null && sus.length() == 15 && !Objects.equals(guia.getSus(), sus)){
+            guia.setSus(sus);
+        }
+        if (procedimento != null && procedimento.length() > 2 && !Objects.equals(guia.getProcedimento(), procedimento)) {
+            guia.setProcedimento(procedimento);
+        }
+
+        if (dataNascimento != null) {
+            guia.setDataNascimento(dataNascimento);
+        }
+
+        if (dataRecebimento != null) {
+            guia.setDataRecebimento(dataRecebimento);
+        }
     }
     public List<Guia> listGuias(){
         return guiaRespository.findAll();
