@@ -4,6 +4,7 @@ import com.sistemadecadastro.cadastrodeguias.model.Guia;
 import com.sistemadecadastro.cadastrodeguias.repository.GuiaRespository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -57,5 +58,24 @@ public class GuiaService {
     }
     public List<Guia> listGuias(){
         return guiaRespository.findAll();
+    }
+
+    public List<Guia> searchGuiasByName(String nome){
+        var guias = guiaRespository.findGuiasByNomeIgnoreCase(nome);
+        if(guias.isEmpty()) throw new EmptyResultDataAccessException("Nenhuma guia encontrado para o nome: " + nome, 1);
+        return guias;
+    }
+    public List<Guia> searchGuiasByProcedimento(String procedimento){
+        var guias = guiaRespository.findGuiasByProcedimentoContainingIgnoreCase(procedimento);
+        if(guias.isEmpty()) throw new EmptyResultDataAccessException("Nenhuma guia encontrado para o procedimento: " + procedimento, 1);
+        return guias;
+    }
+
+    public List<Guia> searchGuiasPriority(){
+        var dataAtual = LocalDate.now();
+        var dataLimite = dataAtual.minusYears(60);
+        var guias = guiaRespository.findGuiasByDataNascimentoBefore(dataLimite);
+        if(guias.isEmpty()) throw new EmptyResultDataAccessException("Nenhuma guia de idoso encontrada", 1);
+        return guias;
     }
 }
