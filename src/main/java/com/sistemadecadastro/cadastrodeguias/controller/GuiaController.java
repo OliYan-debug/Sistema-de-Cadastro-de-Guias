@@ -3,6 +3,7 @@ package com.sistemadecadastro.cadastrodeguias.controller;
 import com.sistemadecadastro.cadastrodeguias.model.Guia;
 import com.sistemadecadastro.cadastrodeguias.service.GuiaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,5 +49,37 @@ public class GuiaController {
     @GetMapping("/")
     public List<Guia> listGuias(){
         return guiaService.listGuias();
+    }
+
+    @GetMapping("/search/name/{name}")
+    public ResponseEntity<List<Guia>> searchGuiasByName(
+            @PathVariable(name = "name") String nome
+    ){
+        try{
+            var guias = guiaService.searchGuiasByName(nome);
+            return ResponseEntity.ok(guias);
+        }catch(EmptyResultDataAccessException em){
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/search/procedimento/{proc}")
+    public ResponseEntity<List<Guia>> searchGuiasByProcedimento(
+            @PathVariable(name = "proc") String procedimento
+    ){
+        try{
+            var guias = guiaService.searchGuiasByProcedimento(procedimento);
+            return ResponseEntity.ok(guias);
+        }catch(EmptyResultDataAccessException em){
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/search/priority")
+    public ResponseEntity<List<Guia>> searchGuiasByAge(){
+        try{
+            var guias = guiaService.searchGuiasPriority();
+            return ResponseEntity.ok(guias);
+        }catch(EmptyResultDataAccessException em){
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -2,7 +2,11 @@ package com.sistemadecadastro.cadastrodeguias.repository;
 
 import com.sistemadecadastro.cadastrodeguias.model.Guia;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface GuiaRespository extends JpaRepository<Guia, Integer> {
     /**
@@ -15,4 +19,7 @@ public interface GuiaRespository extends JpaRepository<Guia, Integer> {
     public void deleteGuiaById(int id);
 
 
+    public List<Guia> findGuiasByProcedimentoContainingIgnoreCase(@Size(min = 2) String procedimento);
+    public List<Guia> findGuiasByDataNascimentoBefore(LocalDate dataNascimento);
+    public List<Guia> findGuiasByNomeIgnoreCase(@Size(min = 3) String nome);
 }
