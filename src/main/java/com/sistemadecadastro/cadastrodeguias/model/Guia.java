@@ -15,13 +15,13 @@ public class Guia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Size(min = 3)
+    @Size(min = 3, max=256)
     @Column(name="nome", nullable = false)
     private String nome;
     @Size(min = 15, max = 15)
     @Column(name="sus", nullable = false, length = 15)
     private String sus;
-    @Size(min = 2)
+    @Size(min = 2, max = 60)
     @Column(name = "procedimento", nullable = false)
     private String procedimento;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

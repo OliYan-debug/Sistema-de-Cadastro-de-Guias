@@ -2,6 +2,8 @@ package com.sistemadecadastro.cadastrodeguias.controller;
 
 import com.sistemadecadastro.cadastrodeguias.model.Guia;
 import com.sistemadecadastro.cadastrodeguias.service.GuiaService;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,9 +23,13 @@ public class GuiaController {
     }
 
     @PostMapping("/")
-    public Guia addGuia(@RequestBody Guia guia){
-        System.out.println(guia);
-        return guiaService.saveGuia(guia);
+    public ResponseEntity<String> addGuia(@RequestBody @NotNull Guia guia){
+        try {
+            var guiaSaved = guiaService.saveGuia(guia);
+            return new ResponseEntity<>(guiaSaved.toString(), HttpStatus.OK);
+        }catch(ConstraintViolationException | IllegalArgumentException e){
+            return new ResponseEntity<>("Verifique os campos e certifique que todos correspondem a valores válidos", HttpStatus.BAD_REQUEST);
+        }
     }
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<String> removeGuia(@PathVariable("id") Integer id){
