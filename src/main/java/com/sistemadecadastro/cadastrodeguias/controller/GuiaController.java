@@ -88,4 +88,16 @@ public class GuiaController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/search/date")
+    public ResponseEntity<List<Guia>> searchGuiasBetweenDates(
+            @RequestParam() LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+    ){
+        try{
+            var guias = guiaService.searchGuiasBetweenDates(startDate, endDate);
+            return ResponseEntity.ok(guias);
+        }catch(EmptyResultDataAccessException em){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
