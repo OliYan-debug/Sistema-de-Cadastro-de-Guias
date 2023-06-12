@@ -22,4 +22,5 @@ public interface GuiaRespository extends JpaRepository<Guia, Integer> {
     public List<Guia> findGuiasByProcedimentoContainingIgnoreCase(@Size(min = 2) String procedimento);
     public List<Guia> findGuiasByDataNascimentoBefore(LocalDate dataNascimento);
     public List<Guia> findGuiasByNomeIgnoreCase(@Size(min = 3) String nome);
+    public List<Guia> findGuiasByDataRecebimentoBetween(LocalDate startDate, LocalDate endDate);
 }

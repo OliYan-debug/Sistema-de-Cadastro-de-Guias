@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -76,6 +77,13 @@ public class GuiaService {
         var dataLimite = dataAtual.minusYears(60);
         var guias = guiaRespository.findGuiasByDataNascimentoBefore(dataLimite);
         if(guias.isEmpty()) throw new EmptyResultDataAccessException("Nenhuma guia de idoso encontrada", 1);
+        return guias;
+    }
+
+    public List<Guia> searchGuiasBetweenDates(LocalDate startDate, LocalDate end){
+        var endDate = end != null ? end : startDate;
+        var guias = guiaRespository.findGuiasByDataRecebimentoBetween(startDate, endDate);
+        if(guias.isEmpty()) throw new EmptyResultDataAccessException("Nenhuma guia encontrada nessas datas ", 1);
         return guias;
     }
 }
